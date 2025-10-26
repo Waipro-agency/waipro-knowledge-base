@@ -1,0 +1,168 @@
+{
+  "name": "Social Media Content Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Schedule Trigger (Daily 9am)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.VITE_SUPABASE_URL}}/rest/v1/content_queue",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.VITE_SUPABASE_ANON_KEY}}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.VITE_SUPABASE_SERVICE_ROLE_KEY}}"
+            }
+          ]
+        },
+        "qs": {
+          "status": "eq.pending",
+          "scheduled_date": "lte.{{new Date().toISOString()}}"
+        }
+      },
+      "name": "Get Pending Posts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.length}}",
+              "operation": "larger",
+              "value2": 0
+            }
+          ]
+        }
+      },
+      "name": "Check if Posts Exist",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4-turbo",
+        "options": {
+          "temperature": 0.8
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a social media content creator for a digital agency. Create engaging posts with hashtags and call-to-actions."
+            },
+            {
+              "role": "user",
+              "content": "={{\"Create a social media post about: \" + $json.topic + \"\\n\\nTarget platform: \" + $json.platform + \"\\n\\nTone: \" + ($json.tone || \"professional and engaging\")}}"
+            }
+          ]
+        }
+      },
+      "name": "Generate Content with AI",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1,
+      "position": [850, 200],
+      "credentials": {
+        "openAiApi": {
+          "id": "1",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "platform": "={{$json.platform}}",
+        "content": "={{$json.ai_content}}",
+        "mediaUrl": "={{$json.media_url}}"
+      },
+      "name": "Post to Social Media",
+      "type": "n8n-nodes-base.socialMedia",
+      "typeVersion": 1,
+      "position": [1050, 200]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.VITE_SUPABASE_URL}}/rest/v1/content_queue",
+        "method": "PATCH",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.VITE_SUPABASE_ANON_KEY}}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.VITE_SUPABASE_SERVICE_ROLE_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "published"
+            },
+            {
+              "name": "published_at",
+              "value": "={{new Date().toISOString()}}"
+            }
+          ]
+        },
+        "qs": {
+          "id": "eq.{{$json.id}}"
+        }
+      },
+      "name": "Update Status to Published",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1250, 200]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger (Daily 9am)": {
+      "main": [[{"node": "Get Pending Posts", "type": "main", "index": 0}]]
+    },
+    "Get Pending Posts": {
+      "main": [[{"node": "Check if Posts Exist", "type": "main", "index": 0}]]
+    },
+    "Check if Posts Exist": {
+      "main": [
+        [{"node": "Generate Content with AI", "type": "main", "index": 0}],
+        []
+      ]
+    },
+    "Generate Content with AI": {
+      "main": [[{"node": "Post to Social Media", "type": "main", "index": 0}]]
+    },
+    "Post to Social Media": {
+      "main": [[{"node": "Update Status to Published", "type": "main", "index": 0}]]
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "name": "RAG Knowledge Base Auto-Update",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 2 */2 * *"
+            }
+          ]
+        }
+      },
+      "name": "Schedule Every 2 Days (2am)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "command": "cd /root/WAPRO && git pull origin main"
+      },
+      "name": "Pull Latest from GitHub",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "command": "cd /root/WAPRO/base44-docs && ./b44 scrape"
+      },
+      "name": "Update Base44 Docs",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "command": "find /root/WAPRO/DOCS -name '*.md' -type f"
+      },
+      "name": "Find All Markdown Docs",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const files = $input.first().json.stdout.split('\\n').filter(f => f);\nconst results = [];\n\nfor (const file of files) {\n  const fs = require('fs');\n  const content = fs.readFileSync(file, 'utf8');\n  \n  results.push({\n    filename: file.split('/').pop(),\n    filepath: file,\n    content: content,\n    size: content.length,\n    updated_at: new Date().toISOString()\n  });\n}\n\nreturn results.map(r => ({ json: r }));"
+      },
+      "name": "Read File Contents",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-small",
+        "text": "={{$json.content}}"
+      },
+      "name": "Generate Embeddings",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [1250, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "1",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$env.VITE_SUPABASE_URL}}/rest/v1/knowledge_base",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.VITE_SUPABASE_ANON_KEY}}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.VITE_SUPABASE_SERVICE_ROLE_KEY}}"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=merge-duplicates"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "={{$json.filename}}"
+            },
+            {
+              "name": "content",
+              "value": "={{$json.content}}"
+            },
+            {
+              "name": "category",
+              "value": "documentation"
+            },
+            {
+              "name": "embedding",
+              "value": "={{JSON.stringify($json.embedding)}}"
+            },
+            {
+              "name": "metadata",
+              "value": "={{JSON.stringify({filepath: $json.filepath, size: $json.size})}}"
+            }
+          ]
+        }
+      },
+      "name": "Upsert to Supabase Knowledge Base",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1450, 300]
+    },
+    {
+      "parameters": {
+        "command": "cd /root/WAPRO && git add -A && git commit -m 'Auto-update: RAG sync $(date +%Y-%m-%d)' && git push origin main || echo 'No changes'"
+      },
+      "name": "Commit and Push Changes",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1650, 300]
+    },
+    {
+      "parameters": {
+        "to": "admin@waipro.it",
+        "subject": "RAG Knowledge Base Updated",
+        "text": "={{\"Knowledge base updated successfully.\\n\\nFiles processed: \" + $json.count + \"\\n\\nTimestamp: \" + new Date().toISOString()}}"
+      },
+      "name": "Send Email Notification",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [1850, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Every 2 Days (2am)": {
+      "main": [[{"node": "Pull Latest from GitHub", "type": "main", "index": 0}]]
+    },
+    "Pull Latest from GitHub": {
+      "main": [[{"node": "Update Base44 Docs", "type": "main", "index": 0}]]
+    },
+    "Update Base44 Docs": {
+      "main": [[{"node": "Find All Markdown Docs", "type": "main", "index": 0}]]
+    },
+    "Find All Markdown Docs": {
+      "main": [[{"node": "Read File Contents", "type": "main", "index": 0}]]
+    },
+    "Read File Contents": {
+      "main": [[{"node": "Generate Embeddings", "type": "main", "index": 0}]]
+    },
+    "Generate Embeddings": {
+      "main": [[{"node": "Upsert to Supabase Knowledge Base", "type": "main", "index": 0}]]
+    },
+    "Upsert to Supabase Knowledge Base": {
+      "main": [[{"node": "Commit and Push Changes", "type": "main", "index": 0}]]
+    },
+    "Commit and Push Changes": {
+      "main": [[{"node": "Send Email Notification", "type": "main", "index": 0}]]
+    }
+  }
+}
