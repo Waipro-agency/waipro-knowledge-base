@@ -1,6 +1,6 @@
 # 🚀 WAIPRO Knowledge Base
-
-> **Documentazione centralizzata e sistema RAG per Base44, n8n, MCP e automazioni AI**
+> 
+**Documentazione centralizzata e sistema RAG per Base44, n8n, MCP e automazioni AI**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Status](https://img.shields.io/badge/Status-Active-success)]()
@@ -47,31 +47,23 @@ WAPRO/
 │
 ├── DOCS/                        # 📚 Documentazione
 │   ├── MASTER-GUIDE-BASE44-N8N-MCP.md
-│   ├── RAG-SYSTEM-SETUP.md
-│   ├── GITHUB-AUDIT-REPORT.md
-│   └── CHANGELOG.md
+│   ├── BASE44/                  # Base44 + Supabase
+│   ├── N8N/                     # n8n workflows
+│   ├── MCP/                     # Model Context Protocol
+│   └── TUTORIALS/               # Guide pratiche
 │
-├── CONFIG/                      # ⚙️ Configurazioni
-│   ├── credentials.env.template # Template credenziali
-│   └── .gitkeep
+├── CONFIGS/                     # ⚙️ Configurazioni
+│   ├── .env.example
+│   ├── docker-compose.yml
+│   └── templates/
 │
-├── MCP/                         # 🤖 Model Context Protocol Server
-│   ├── index.js                 # Server MCP
-│   ├── package.json             # Dipendenze
-│   ├── README.md                # Guida MCP
-│   └── node_modules/
+├── SCRIPTS/                     # 🛠️ Scripts di utilità
+│   ├── scraper/                 # Scraping automatico docs
+│   └── sync/                    # Sync knowledge base
 │
-├── base44-sdk/                  # 📦 SDK Base44 → Supabase
-│   └── [repository clonato]
-│
-├── base44-docs/                 # 📖 Tool Documentazione Base44
-│   ├── b44                      # CLI tool
-│   └── [repository clonato]
-│
-└── scripts/                     # 🔧 Utility Scripts
-    ├── sync-knowledge.sh        # Sync automatico
-    ├── generate-embeddings.js   # RAG embeddings
-    └── docs-api-server.js       # API docs (opzionale)
+└── WORKFLOWS/                   # 🔄 n8n workflows ready-to-use
+    ├── base44_to_supabase/
+    └── rag_pipeline/
 ```
 
 ---
@@ -80,54 +72,37 @@ WAPRO/
 
 ### Prerequisiti
 
-- **Node.js** 18+ (`node --version`)
-- **npm** o **yarn**
-- **Git**
-- **Supabase Account** (per Base44)
-- **GitHub CLI** (`gh`) - opzionale ma consigliato
-
-### Installazione
-
 ```bash
-# 1. Clona il repository
-git clone https://github.com/Waipro-agency/waipro-knowledge-base.git
-cd waipro-knowledge-base
-
-# 2. Setup MCP Server
-cd MCP
-npm install
-chmod +x index.js
-
-# 3. Configura credenziali
-cd ../CONFIG
-cp credentials.env.template credentials.env
-# Edita credentials.env con i tuoi valori reali
-
-# 4. Test Base44 docs tool
-cd ../base44-docs
-./b44 stats
-./b44 search "authentication"
-
-# 5. (Opzionale) Setup sync automatico
-cd ../scripts
-chmod +x sync-knowledge.sh
-# Aggiungi a crontab: 0 */6 * * * /path/to/sync-knowledge.sh
+# Software necessario
+- Git
+- Node.js 18+
+- Docker & Docker Compose
+- Un account Base44
+- Un progetto Supabase
 ```
 
-### Verifica Installazione
+### Setup Rapido
 
+1. **Clone repository**
 ```bash
-# Test MCP server
-cd ~/WAPRO/MCP
-node index.js
-# Output: "MCP Filesystem Server avviato"
+git clone https://github.com/Waipro-agency/waipro-knowledge-base.git
+cd waipro-knowledge-base
+```
 
-# Test Base44 tool
-cd ~/WAPRO/base44-docs
-./b44 search "setup"
+2. **Setup credenziali**
+```bash
+cp CONFIGS/.env.example CONFIGS/.env
+# Modifica CONFIGS/.env con le tue credenziali
+```
 
-# Verifica configurazione
-cat ~/WAPRO/CONFIG/credentials.env.template
+3. **Installa dipendenze**
+```bash
+npm install
+```
+
+4. **Avvia i servizi**
+```bash
+docker-compose up -d
 ```
 
 ---
@@ -136,178 +111,76 @@ cat ~/WAPRO/CONFIG/credentials.env.template
 
 ### Guide Principali
 
-1. **[MASTER GUIDE](./DOCS/MASTER-GUIDE-BASE44-N8N-MCP.md)**
-   - Setup completo Base44 + n8n + MCP
-   - Integrazione end-to-end
-   - Best practices e troubleshooting
+1. **[MASTER GUIDE](./DOCS/MASTER-GUIDE-BASE44-N8N-MCP.md)** - Punto di partenza completo
+2. **[Base44 + Supabase](./DOCS/BASE44/)** - Migrazione e SDK
+3. **[n8n Automation](./DOCS/N8N/)** - Workflows e integrazioni
+4. **[MCP Setup](./DOCS/MCP/)** - Server e tools
+5. **[DNS Configuration](./ISTRUZIONI-DNS-GODADDY.md)** - Setup DNS su GoDaddy
 
-2. **[RAG System Setup](./DOCS/RAG-SYSTEM-SETUP.md)**
-   - Sistema di retrieval-augmented generation
-   - Sync automatico documentazione
-   - Embedding e vector search
+### Per chi inizia
 
-3. **[GitHub Audit Report](./DOCS/GITHUB-AUDIT-REPORT.md)**
-   - Analisi repository esistenti
-   - Action plan per organizzazione
-   - Security audit
-
-### Link Rapidi
-
-| Risorsa | Descrizione | Link |
-|---------|-------------|------|
-| Base44 Docs | Documentazione ufficiale | https://docs.base44.com |
-| n8n Docs | Workflow automation | https://docs.n8n.io |
-| Supabase Docs | Backend e database | https://supabase.com/docs |
-| MCP Protocol | Model Context Protocol | Locale in `./MCP/` |
+📖 Leggi prima la **[MASTER GUIDE](./DOCS/MASTER-GUIDE-BASE44-N8N-MCP.md)** per una panoramica completa dell'ecosistema
 
 ---
 
 ## 🛠️ Tool e Risorse
 
-### Base44 Docs Tool
-
-```bash
-# Ricerca documentazione
-./base44-docs/b44 search "your query"
-
-# Ricerca con filtro sezione
-./base44-docs/b44 s "Google login" -s Integrations
-
-# Ottieni pagina specifica
-./base44-docs/b44 get "/Guides/Setting-up-SSO"
-
-# Aggiorna documentazione
-./base44-docs/b44 scrape
-
-# Risposta AI-formatted
-./base44-docs/b44 ai-answer "How to setup payments?"
-```
-
 ### MCP Server
 
-**Strumenti disponibili per Claude Desktop**:
+Il server MCP offre questi tools agli agenti AI:
 
-- `read_file` - Leggi file
-- `write_file` - Scrivi file
-- `list_directory` - Lista directory
-- `create_directory` - Crea directory
-- `delete_file` - Elimina file/dir
-- `execute_command` - Esegui comandi shell
-- `file_info` - Info file/dir
+- `search_knowledge_base` - Ricerca semantica nella knowledge base
+- `get_document` - Recupera documento specifico
+- `list_workflows` - Elenca workflow n8n disponibili
 
-**Configurazione Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
-
-```json
-{
-  "mcpServers": {
-    "filesystem": {
-      "command": "node",
-      "args": ["/Users/YOUR_USERNAME/WAPRO/MCP/index.js"]
-    }
-  }
-}
+**Avvio:**
+```bash
+cd SCRIPTS/mcp-server
+npx tsx src/index.ts
 ```
 
-### Base44 SDK
+### Base44 Docs Tool
 
-```javascript
-// Il tuo codice Base44 esistente funziona inalterato
-import { BlogPost, User, Product } from "./src/api/entities";
+Scraping automatico documentazione Base44:
 
-const posts = await BlogPost.list("-created_date");
-const user = await User.me();
-const products = await Product.filter({ status: "active" });
+```bash
+cd SCRIPTS/base44-docs-tool
+npm start
 ```
 
 ---
 
 ## ⚙️ Configurazione
 
-### Environment Variables
+### Variabili d'Ambiente
 
-Copia il template e configura i tuoi valori:
-
-```bash
-cp CONFIG/credentials.env.template CONFIG/credentials.env
-```
-
-**Variabili principali**:
+Crea `CONFIGS/.env` partendo da `CONFIGS/.env.example`:
 
 ```env
-# Supabase / Base44
-VITE_SUPABASE_URL=...
-VITE_SUPABASE_ANON_KEY=...
-VITE_SUPABASE_SERVICE_ROLE_KEY=...
+# Base44
+BASE44_API_KEY=your_api_key
+BASE44_ACCOUNT_ID=your_account_id
+
+# Supabase
+SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_ANON_KEY=your_anon_key
 
 # n8n
-N8N_URL=https://n8n.waipro.it
-N8N_API_KEY=...
+N8N_BASIC_AUTH_USER=admin
+N8N_BASIC_AUTH_PASSWORD=your_password
+N8N_HOST=n8n.waipro.it
 
-# AI Services
-OPENAI_API_KEY=...
-ANTHROPIC_API_KEY=...
-
-# Domini WAIPRO
-# n8n.waipro.it - n8n automation
-# t.waipro.it - admin@waipro.it / Benessere84++
+# OpenAI
+OPENAI_API_KEY=sk-...
 ```
 
-### Sicurezza
+### Template Credenziali
 
-⚠️ **IMPORTANTE**:
-- Non committare MAI `credentials.env` in Git
-- Usa `.gitignore` per escludere file sensibili
-- Ruota le chiavi API periodicamente
-- Usa environment variables in production
+Tutti i template sono in `CONFIGS/templates/` - **non committare mai credenziali reali**.
 
 ---
 
-## 🤝 Contributing
-
-### Workflow
-
-1. **Fork** questo repository
-2. **Crea branch** feature (`git checkout -b feature/amazing-feature`)
-3. **Commit** modifiche (`git commit -m 'Add amazing feature'`)
-4. **Push** al branch (`git push origin feature/amazing-feature`)
-5. **Apri Pull Request**
-
-### Conventional Commits
-
-Usa prefissi standard:
-
-- `feat:` - Nuova feature
-- `fix:` - Bug fix
-- `docs:` - Documentazione
-- `style:` - Formattazione
-- `refactor:` - Refactoring codice
-- `test:` - Test
-- `chore:` - Manutenzione
-
-Esempio: `docs: update Base44 migration guide`
-
-### Aggiornare Documentazione
-
-```bash
-# 1. Modifica i file in DOCS/
-vim DOCS/MASTER-GUIDE-BASE44-N8N-MCP.md
-
-# 2. Testa localmente
-
-# 3. Commit
-git add DOCS/
-git commit -m "docs: update Base44 setup instructions"
-
-# 4. Push
-git push origin main
-
-# 5. (Opzionale) Rigenera embeddings
-node scripts/generate-embeddings.js
-```
-
----
-
-## 📊 Roadmap
+## 🎯 Stato del Progetto
 
 ### ✅ Completato
 
@@ -317,10 +190,10 @@ node scripts/generate-embeddings.js
 - [x] Base44 docs tool integrato
 - [x] Template credenziali
 - [x] GitHub audit completo
+- [x] DNS configuration per n8n.waipro.it
 
 ### 🚧 In Progress
 
-- [ ] Deploy n8n.waipro.it
 - [ ] Verifica accesso t.waipro.it
 - [ ] Setup RAG system completo
 - [ ] Generazione embeddings
@@ -340,7 +213,15 @@ node scripts/generate-embeddings.js
 
 ### Domini WAIPRO
 
-- **n8n.waipro.it** - Server automazione n8n (da configurare)
+- **n8n.waipro.it** - Server automazione n8n
+  - **DNS Configuration (Completato 2025-10-26)**:
+    - Record Type: AAAA
+    - Name: n8n
+    - Value: 2a02:4780:41:9001::1
+    - TTL: 600 seconds
+    - Status: ✅ Propagato globalmente
+    - Verifica: [DNSChecker](https://dnschecker.org/#AAAA/n8n.waipro.it)
+
 - **t.waipro.it** - Admin: `admin@waipro.it` / `Benessere84++`
 
 ### Contatti
@@ -351,10 +232,28 @@ node scripts/generate-embeddings.js
 
 ---
 
+## 🤝 Contributing
+
+Contribuzioni benvenute! Segui questi step:
+
+1. Fork il repository
+2. Crea branch feature (`git checkout -b feature/amazing-feature`)
+3. Commit modifiche (`git commit -m 'Add amazing feature'`)
+4. Push al branch (`git push origin feature/amazing-feature`)
+5. Apri Pull Request
+
+### Guidelines
+
+- 📝 Aggiorna sempre la documentazione
+- ✅ Testa le modifiche prima di committare
+- 🔒 Non committare credenziali o secrets
+- 📋 Usa commit messages descrittivi
+
+---
+
 ## 📄 License
 
 MIT License - Usa liberamente in progetti.
-
 Vedi [LICENSE](./LICENSE) per dettagli.
 
 ---
@@ -378,4 +277,3 @@ Vedi [LICENSE](./LICENSE) per dettagli.
 **Creato e mantenuto da WAIPRO Agency** 🚀
 
 *Last Updated: 2025-10-26*
-
