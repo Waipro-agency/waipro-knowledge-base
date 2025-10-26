@@ -1,0 +1,140 @@
+{
+  "name": "Base44 AI Agent with MCP",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-agent",
+        "responseMode": "responseNode"
+      },
+      "name": "Trigger: Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.VITE_SUPABASE_URL}}/rest/v1/{{$json.entity}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.VITE_SUPABASE_ANON_KEY}}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.VITE_SUPABASE_SERVICE_ROLE_KEY}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Get Base44 Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4",
+        "options": {
+          "temperature": 0.7
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are an AI assistant that processes Base44 data and provides insights."
+            },
+            {
+              "role": "user",
+              "content": "={{\"Analyze this data: \" + JSON.stringify($json.data)}}"
+            }
+          ]
+        }
+      },
+      "name": "OpenAI GPT",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1,
+      "position": [650, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "1",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$env.VITE_SUPABASE_URL}}/rest/v1/ai_analysis",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.VITE_SUPABASE_ANON_KEY}}"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.VITE_SUPABASE_SERVICE_ROLE_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "entity_id",
+              "value": "={{$json.id}}"
+            },
+            {
+              "name": "analysis",
+              "value": "={{$json.choices[0].message.content}}"
+            },
+            {
+              "name": "created_at",
+              "value": "={{new Date().toISOString()}}"
+            }
+          ]
+        }
+      },
+      "name": "Save AI Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"analysis\": $json } }}"
+      },
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    }
+  ],
+  "connections": {
+    "Trigger: Webhook": {
+      "main": [[{"node": "Get Base44 Data", "type": "main", "index": 0}]]
+    },
+    "Get Base44 Data": {
+      "main": [[{"node": "OpenAI GPT", "type": "main", "index": 0}]]
+    },
+    "OpenAI GPT": {
+      "main": [[{"node": "Save AI Analysis", "type": "main", "index": 0}]]
+    },
+    "Save AI Analysis": {
+      "main": [[{"node": "Respond to Webhook", "type": "main", "index": 0}]]
+    }
+  }
+}
