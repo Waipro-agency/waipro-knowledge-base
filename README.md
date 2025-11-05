@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Status](https://img.shields.io/badge/Status-Active-success)]()
-[![Last Updated](https://img.shields.io/badge/Updated-2025--10--26-blue)]()
+[![Last Updated](https://img.shields.io/badge/Updated-2025--11--05-blue)]()
 
 ---
 
@@ -70,40 +70,28 @@ WAPRO/
 
 ## 🚀 Quick Start
 
-### Prerequisiti
+### 🔥 Setup in 3 Comandi (15 minuti)
 
 ```bash
-# Software necessario
-- Git
-- Node.js 18+
-- Docker & Docker Compose
-- Un account Base44
-- Un progetto Supabase
-```
-
-### Setup Rapido
-
-1. **Clone repository**
-```bash
+# 1. Clone repository
 git clone https://github.com/Waipro-agency/waipro-knowledge-base.git
 cd waipro-knowledge-base
-```
 
-2. **Setup credenziali**
-```bash
-cp CONFIGS/.env.example CONFIGS/.env
-# Modifica CONFIGS/.env con le tue credenziali
-```
+# 2. Run setup automatico
+./SETUP-SCRIPTS/complete-setup.sh
 
-3. **Installa dipendenze**
-```bash
-npm install
-```
-
-4. **Avvia i servizi**
-```bash
+# 3. Start services
 docker-compose up -d
 ```
+
+**📖 Guida completa:** [QUICK-START.md](QUICK-START.md)
+
+### Prerequisiti
+
+- Git
+- Docker & Docker Compose (installato automaticamente se mancante)
+- Token WhatsApp Business API
+- Account Base44 con API key
 
 ---
 
@@ -111,15 +99,18 @@ docker-compose up -d
 
 ### Guide Principali
 
-1. **[MASTER GUIDE](./DOCS/MASTER-GUIDE-BASE44-N8N-MCP.md)** - Punto di partenza completo
-2. **[Base44 + Supabase](./DOCS/BASE44/)** - Migrazione e SDK
-3. **[n8n Automation](./DOCS/N8N/)** - Workflows e integrazioni
-4. **[MCP Setup](./DOCS/MCP/)** - Server e tools
-5. **[DNS Configuration](./ISTRUZIONI-DNS-GODADDY.md)** - Setup DNS su GoDaddy
+1. **[🚀 QUICK START](./QUICK-START.md)** - Setup completo in 15 minuti
+2. **[📋 PIANO OPERATIVO](./DOCS/WAIPRO-OPERATIONAL-PLAN.md)** - Strategia e architettura completa
+3. **[📚 MASTER GUIDE](./DOCS/MASTER-GUIDE-BASE44-N8N-MCP.md)** - Base44, n8n e MCP
+4. **[🔐 Social Login](./DOCS/BASE44-SOCIAL-LOGIN-WAIPRO-GUIDE.md)** - OAuth con Auth0
+5. **[🤖 Comet.ai Integration](./DOCS/COMET-AI-INTEGRATION-STRATEGY.md)** - Browser automation
+6. **[🌐 DNS Configuration](./ISTRUZIONI-DNS-GODADDY.md)** - Setup DNS su GoDaddy
 
-### Per chi inizia
+### 🎯 Per chi inizia
 
-📖 Leggi prima la **[MASTER GUIDE](./DOCS/MASTER-GUIDE-BASE44-N8N-MCP.md)** per una panoramica completa dell'ecosistema
+1. Leggi **[QUICK-START.md](./QUICK-START.md)** per setup rapido
+2. Approfondisci con **[WAIPRO-OPERATIONAL-PLAN.md](./DOCS/WAIPRO-OPERATIONAL-PLAN.md)**
+3. Importa i workflow n8n da `n8n-workflows/`
 
 ---
 
@@ -182,30 +173,35 @@ Tutti i template sono in `CONFIGS/templates/` - **non committare mai credenziali
 
 ## 🎯 Stato del Progetto
 
-### ✅ Completato
+### ✅ Completato (Novembre 2025)
 
-- [x] Setup repository strutturato
-- [x] Creazione guida master
-- [x] MCP server funzionante
-- [x] Base44 docs tool integrato
-- [x] Template credenziali
-- [x] GitHub audit completo
-- [x] DNS configuration per n8n.waipro.it
+- [x] 🏗️ Setup repository strutturato
+- [x] 📚 Piano operativo completo multi-tenant
+- [x] 🚀 Quick Start guide automatizzata
+- [x] 🤖 Workflow n8n WhatsApp Multi-Tenant Orchestrator
+- [x] 🔄 Circuit breaker e retry logic
+- [x] 📤 Sistema escalation automatica
+- [x] 📝 Documentazione completa setup
+- [x] 🔐 Template credenziali e secrets management
+- [x] 🌐 DNS configuration per n8n.waipro.it
+- [x] 🛠️ Script setup automatico interattivo
 
 ### 🚧 In Progress
 
-- [ ] Verifica accesso t.waipro.it
-- [ ] Setup RAG system completo
-- [ ] Generazione embeddings
-- [ ] CI/CD pipeline
+- [ ] 🔐 Setup Auth0 per social login
+- [ ] 🎨 Integrazione OpenWeb UI
+- [ ] 🤖 Automazione Comet.ai Pro
+- [ ] 🖥️ Deploy VPS Hostinger
+- [ ] 🧪 Testing sistema completo
 
 ### 📅 Planned
 
-- [ ] Dashboard gestione docs
-- [ ] Integrazione n8n ↔ Base44 ↔ MCP
-- [ ] Workflow templates pronti
-- [ ] Video tutorial
-- [ ] API REST per documentazione
+- [ ] 📊 Dashboard monitoring e metriche
+- [ ] 🔊 Voice input/output con Whisper
+- [ ] 📸 Analisi immagini GPT-4 Vision
+- [ ] 📱 App mobile per operatori
+- [ ] 🌍 Multi-language support
+- [ ] 📹 Video tutorial completo
 
 ---
 
