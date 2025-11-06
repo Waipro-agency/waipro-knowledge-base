@@ -69,6 +69,113 @@ Script pratici per acquisire proprietari diffidenti.
 
 ---
 
+#### 4. **STRATEGIA_PRESENTAZIONE_PROSPECT_STUDENTLIVING.md**
+Guida completa su come presentare e chiudere il prospect.
+
+**Contenuti:**
+- 🎭 3 formati presentazione (Executive 45min, Workshop 3h, Async)
+- 💰 3 pacchetti servizi proposti (€8.5k, €24k, €45k) con pricing
+- 🎁 Bonus €5.800 per firma entro 7 giorni
+- 💬 Gestione obiezioni con script completi
+- 📧 Email follow-up templates (2h, 3 giorni, 7 giorni)
+- 📊 Metriche successo presentazione
+- 📞 Supporto & checklist pre-meeting
+
+**Per chi:** Chi deve presentare al cliente e chiudere la vendita
+
+---
+
+#### 5. **SLIDES_PRESENTAZIONE_STUDENTLIVING.md**
+Deck completo 25 slide pronto per presentazione.
+
+**Contenuti:**
+- 📊 Slide 2: "Il Problema da €35M" (10.810 studenti senza casa)
+- 🤖 Slide 5-7: Demo live (chatbot WhatsApp + landing page AI)
+- 💰 Slide 10: ROI Anno 1 (€150K su €47K = 219% ROI)
+- 📈 Slide 11: Confronto 3 anni (€293K differenza)
+- ⚡ Slide 12: First-mover advantage urgency
+- 🏨 Slide 13: Strategia anti-Airbnb (+50% yield)
+- 💵 Slide 17: Pricing 3 pacchetti
+- 🎯 Slide 24: Domanda finale chiusura emotiva
+- 📝 Speaker notes per ogni slide
+
+**Per chi:** Presentazione diretta al cliente (con script cosa dire)
+
+---
+
+#### 6. **PROGETTO_PILOTA_1200_EURO.md** ⭐ BUDGET REALISTICO
+Versione low-budget per neofiti o clienti con budget limitato.
+
+**Contenuti:**
+- 💰 Budget completo €1.200 (vs €24k-45k originali)
+- 🛠️ 3 componenti essenziali da costruire:
+  1. Landing page semplice con form (Tally.so GRATIS)
+  2. Chatbot WhatsApp base (Wassenger €15/mese)
+  3. Email automation 3-step (Mailchimp GRATIS)
+- 🎯 Strategie acquisizione low-cost:
+  - Facebook Ads mini (€150) → 12-20 lead
+  - Gruppi Facebook (€0) → 5-10 lead
+  - Database email (€150) → 10-25 lead
+  - **TOTALE: 30-35 lead in 30 giorni**
+- 📱 Tool ESATTI con link (quasi tutti gratuiti!)
+- ⏱️ Timeline 30 giorni passo-passo
+- 📊 Report finale da consegnare al cliente
+- 💡 3 opzioni payment (fee fissa, performance, retainer)
+
+**Per chi:** Neofiti o budget limitati - implementazione pratica immediata
+
+---
+
+#### 7. **COME_PUBBLICARE_E_PRESENTARE.md**
+Guida per pubblicare i documenti e presentare a cliente 65 anni "vecchio stampo".
+
+**Contenuti:**
+- 🌐 3 metodi pubblicazione:
+  1. PDF + Google Drive (PIÙ SEMPLICE)
+  2. GitHub Pages (sito web gratis)
+  3. Notion (più carino visivamente)
+- 👴 Come presentare a 65enne vecchio stampo:
+  - ❌ Cosa NON fare (gergo tecnico, 50 slide, documenti pesanti)
+  - ✅ Cosa FARE (MOSTRA risultati, metafore semplici, demo fisica, linguaggio €€€)
+- 📱 4 Demo fisiche che capisce:
+  1. WhatsApp bot sul telefono
+  2. Google Sheets con lead in real-time
+  3. Landing page su tablet
+  4. Metafora "dipendente 24/7 che costa €40/mese"
+- 📄 Foglio 1 pagina da stampare e dare in mano
+- 💬 Script conversazione completo con gestione obiezioni
+- 📧 Email template che capisce (zero tecnicismi)
+
+**Per chi:** Chi deve spiegare a cliente non tecnico - linguaggio semplice
+
+---
+
+#### 8. **STRATEGIA_TRIAL_STEP_BY_STEP.md** ⭐ APPROCCIO GRADUALE
+Modello "Prova prima, Paga dopo" ispirato a Ranking Coach.
+
+**Contenuti:**
+- 🎁 Strategia 3 livelli graduali:
+  - **LIVELLO 1:** Trial GRATIS 7 giorni (€0) → 10 lead omaggio
+  - **LIVELLO 2:** Mini-progetto €300 14 giorni → 30 lead
+  - **LIVELLO 3:** Progetto completo €1.200 30 giorni → 60-80 lead
+- 📊 Dashboard stile Ranking Coach (Google Data Studio gratuito)
+- 🎯 Onboarding guidato:
+  - Email Day 1: "Benvenuta"
+  - Email Day 3: "Come sta andando?"
+  - Email Day 10: "Ottimo lavoro! Numeri"
+  - Email Day 30: "Report finale"
+- 💡 Elementi "WOW" per invogliare:
+  - Notifiche Telegram/WhatsApp real-time
+  - Gamification con badge/premi
+  - Video tutorial mini (30 sec)
+  - Confronto prima/dopo settimanale
+- 🔄 Upsell naturale: dopo vede funzionare trial → vuole continuare → proponi €300 → poi €1.200
+- 📄 Proposta 1 pagina: 3 step chiari con checkbox
+
+**Per chi:** Clienti diffidenti - riduce rischio, dimostra valore gradualmente
+
+---
+
 ## 🎯 PROBLEMA DA RISOLVERE
 
 **Pain Points Primari Student Living:**
